@@ -1,37 +1,43 @@
 package com.example.datawarehouse.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "fx_deal", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "deal_unique_id")
+@Table(name = "fx_deals", indexes = {
+        @Index(name = "idx_deal_unique_id", columnList = "dealUniqueId", unique = true)
 })
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class FxDeal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "deal_unique_id", nullable = false, length = 50)
+    @Column(nullable = false, unique = true, length = 100)
     private String dealUniqueId;
 
-    @Column(name = "from_currency_iso_code", nullable = false, length = 3)
+    @Column(nullable = false, length = 3)
     private String fromCurrencyIsoCode;
 
-    @Column(name = "to_currency_iso_code", nullable = false, length = 3)
+    @Column(nullable = false, length = 3)
     private String toCurrencyIsoCode;
 
-    @Column(name = "deal_timestamp", nullable = false)
-    private Instant dealTimestamp;
+    @Column(nullable = false)
+    private LocalDateTime dealTimestamp;
 
-    @Column(name = "deal_amount", nullable = false, precision = 19, scale = 4)
+    @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal dealAmount;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
 }

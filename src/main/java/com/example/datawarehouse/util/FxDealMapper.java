@@ -1,11 +1,15 @@
 package com.example.datawarehouse.util;
 
-import com.example.datawarehouse.dto.FxDealRequestDTO;
+import com.example.datawarehouse.dto.FxDealRequest;
+import com.example.datawarehouse.dto.FxDealResponse;
 import com.example.datawarehouse.model.FxDeal;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface FxDealMapper {
 
-    FxDeal toEntity(FxDealRequestDTO requestDto);
+    FxDeal toEntity(FxDealRequest request);
+
+    FxDealResponse toResponse(FxDeal entity);
 }

@@ -1,64 +1,86 @@
 package com.example.datawarehouse.service;
 
-import com.example.datawarehouse.dto.ErrorDetail;
-import com.example.datawarehouse.dto.FxDealRequestDTO;
+import com.example.datawarehouse.dto.FxDealRequest;
+import com.example.datawarehouse.dto.FxDealResponse;
 import com.example.datawarehouse.dto.ImportSummaryResponse;
+import com.example.datawarehouse.exception.DuplicateDealException;
 import com.example.datawarehouse.model.FxDeal;
 import com.example.datawarehouse.repository.FxDealRepository;
 import com.example.datawarehouse.util.FxDealMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class FxDealService {
+
     private final FxDealRepository repository;
     private final FxDealMapper mapper;
 
-    public ImportSummaryResponse importDeals(List<FxDealRequestDTO> requests) {
-        int importedCount = 0;
-        List<ErrorDetail> errors = new ArrayList<>();
+    public ImportSummaryResponse importDeals(List<FxDealRequest> requests) {
+        log.info("Starting import of {} deals", requests.size());
 
-        for (FxDealRequestDTO request : requests) {
-            ErrorDetail error = saveSingleDealIsolated(request);
-            if (error == null) {
-                importedCount++;
-            } else {
-                errors.add(error);
+        ImportSummaryResponse summary = ImportSummaryResponse.builder()
+                .imported(0)
+                .skipped(0)
+                .build();
+
+        for (FxDealRequest request : requests) {
+            try {
+                saveDeal(request);
+                summary.setImported(summary.getImported() + 1);
+                log.debug("Successfully imported deal: {}", request.getDealUniqueId());
+
+            } catch (DuplicateDealException e) {
+                summary.setSkipped(summary.getSkipped() + 1);
+                summary.getErrors().add(ImportSummaryResponse.ErrorDetail.builder()
+                        .dealUniqueId(request.getDealUniqueId())
+                        .reason("Duplicate entry")
+                        .build());
+                log.warn("Skipped duplicate deal: {}", request.getDealUniqueId());
+
+            } catch (Exception e) {
+                summary.setSkipped(summary.getSkipped() + 1);
+                summary.getErrors().add(ImportSummaryResponse.ErrorDetail.builder()
+                        .dealUniqueId(request.getDealUniqueId())
+                        .reason(e.getMessage())
+                        .build());
+                log.error("Failed to import deal {}: {}", request.getDealUniqueId(), e.getMessage());
             }
         }
 
-        return new ImportSummaryResponse(importedCount, errors.size(), errors);
+        log.info("Import completed: {} imported, {} skipped", summary.getImported(), summary.getSkipped());
+        return summary;
     }
 
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public ErrorDetail saveSingleDealIsolated(FxDealRequestDTO request) {
-        String dealId = request.dealUniqueId();
+    public FxDealResponse saveDeal(FxDealRequest request) {
+        log.debug("Attempting to save deal: {}", request.getDealUniqueId());
 
-        if (repository.existsByDealUniqueId(dealId)) {
-            log.warn("Skipping deal: Duplicate ID found: {}", dealId);
-            return new ErrorDetail(dealId, "Duplicate deal ID");
+        if (repository.existsByDealUniqueId(request.getDealUniqueId())) {
+            throw new DuplicateDealException(request.getDealUniqueId());
         }
 
-        try {
-            FxDeal deal = mapper.toEntity(request);
-            repository.save(deal);
-            log.info("Successfully imported deal: {}", dealId);
-            return null; // Success
-        } catch (DataIntegrityViolationException e) {
-            log.error("Database error saving deal {}: {}", dealId, e.getMessage());
-            return new ErrorDetail(dealId, "Database integrity violation (e.g., data too long)");
-        } catch (Exception e) {
-            log.error("Unexpected error saving deal {}: {}", dealId, e.getMessage());
-            return new ErrorDetail(dealId, "Unexpected processing error");
-        }
+        FxDeal deal = mapper.toEntity(request);
+        FxDeal savedDeal = repository.save(deal);
+
+        log.info("Deal saved successfully: {}", savedDeal.getDealUniqueId());
+        return mapper.toResponse(savedDeal);
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<FxDealResponse> getAllDeals() {
+        log.debug("Fetching all deals");
+        return repository.findAll()
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 }
