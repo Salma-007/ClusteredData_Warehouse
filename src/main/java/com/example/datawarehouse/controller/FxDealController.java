@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/deals")
+@RequestMapping("/api/deals")
 @RequiredArgsConstructor
 @Slf4j
 public class FxDealController {

@@ -6,7 +6,7 @@ import com.example.datawarehouse.dto.response.ImportSummaryResponse;
 import com.example.datawarehouse.exception.DuplicateDealException;
 import com.example.datawarehouse.model.FxDeal;
 import com.example.datawarehouse.repository.FxDealRepository;
-import com.example.datawarehouse.util.FxDealMapper;
+import com.example.datawarehouse.mapper.FxDealMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

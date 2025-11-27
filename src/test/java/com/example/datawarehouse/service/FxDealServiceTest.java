@@ -6,7 +6,7 @@ import com.example.datawarehouse.dto.response.ImportSummaryResponse;
 import com.example.datawarehouse.exception.DuplicateDealException;
 import com.example.datawarehouse.model.FxDeal;
 import com.example.datawarehouse.repository.FxDealRepository;
-import com.example.datawarehouse.util.FxDealMapper;
+import com.example.datawarehouse.mapper.FxDealMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
