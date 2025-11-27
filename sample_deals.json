@@ -1,0 +1,37 @@
+[
+  {
+    "dealUniqueId": "FX001",
+    "fromCurrencyIsoCode": "USD",
+    "toCurrencyIsoCode": "EUR",
+    "dealTimestamp": "2024-11-27T10:30:00",
+    "dealAmount": 100000.50
+  },
+  {
+    "dealUniqueId": "FX002",
+    "fromCurrencyIsoCode": "GBP",
+    "toCurrencyIsoCode": "USD",
+    "dealTimestamp": "2024-11-27T11:15:00",
+    "dealAmount": 250000.75
+  },
+  {
+    "dealUniqueId": "FX003",
+    "fromCurrencyIsoCode": "EUR",
+    "toCurrencyIsoCode": "JPY",
+    "dealTimestamp": "2024-11-27T12:00:00",
+    "dealAmount": 500000.00
+  },
+  {
+    "dealUniqueId": "FX004",
+    "fromCurrencyIsoCode": "JPY",
+    "toCurrencyIsoCode": "CHF",
+    "dealTimestamp": "2024-11-27T13:45:00",
+    "dealAmount": 1000000.00
+  },
+  {
+    "dealUniqueId": "FX005",
+    "fromCurrencyIsoCode": "AUD",
+    "toCurrencyIsoCode": "CAD",
+    "dealTimestamp": "2024-11-27T14:30:00",
+    "dealAmount": 75000.25
+  }
+]
