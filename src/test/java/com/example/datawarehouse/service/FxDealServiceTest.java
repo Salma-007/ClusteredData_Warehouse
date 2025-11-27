@@ -1,8 +1,8 @@
 package com.example.datawarehouse.service;
 
-import com.example.datawarehouse.dto.FxDealRequest;
-import com.example.datawarehouse.dto.FxDealResponse;
-import com.example.datawarehouse.dto.ImportSummaryResponse;
+import com.example.datawarehouse.dto.request.FxDealRequest;
+import com.example.datawarehouse.dto.response.FxDealResponse;
+import com.example.datawarehouse.dto.response.ImportSummaryResponse;
 import com.example.datawarehouse.exception.DuplicateDealException;
 import com.example.datawarehouse.model.FxDeal;
 import com.example.datawarehouse.repository.FxDealRepository;

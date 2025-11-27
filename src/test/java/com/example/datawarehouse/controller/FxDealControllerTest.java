@@ -1,8 +1,8 @@
 package com.example.datawarehouse.controller;
 
-import com.example.datawarehouse.dto.FxDealRequest;
-import com.example.datawarehouse.dto.FxDealResponse;
-import com.example.datawarehouse.dto.ImportSummaryResponse;
+import com.example.datawarehouse.dto.request.FxDealRequest;
+import com.example.datawarehouse.dto.response.FxDealResponse;
+import com.example.datawarehouse.dto.response.ImportSummaryResponse;
 import com.example.datawarehouse.service.FxDealService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

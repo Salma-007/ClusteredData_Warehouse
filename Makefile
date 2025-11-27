@@ -15,7 +15,6 @@ run:
 	docker-compose up --build -d
 	@echo "Application is running!"
 	@echo "Access the API at: http://localhost:8080/api/v1/deals"
-	@echo "Access Swagger UI at: http://localhost:8080/api/v1/swagger-ui.html"
 
 # Run tests
 test:

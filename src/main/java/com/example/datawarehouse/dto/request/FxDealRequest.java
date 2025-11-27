@@ -1,4 +1,4 @@
-package com.example.datawarehouse.dto;
+package com.example.datawarehouse.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

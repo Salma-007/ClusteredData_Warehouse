@@ -1,4 +1,4 @@
-package com.example.datawarehouse.dto;
+package com.example.datawarehouse.dto.response;
 
 import lombok.*;
 import java.time.Instant;
