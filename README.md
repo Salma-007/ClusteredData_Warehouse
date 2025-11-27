@@ -416,7 +416,4 @@ docker-compose ps
 docker-compose logs fx-deals-app
 ```
 
-# Clean and rebuild
-.\mvnw.cmd clean test
-```
 
